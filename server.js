@@ -28,21 +28,21 @@ app.use('/api', favoriteRoutes);
 
 
 // =============================
-// 🔗 CONNECT TO MONGODB
+// 🔗 CONNECT TO MONGODB ATLAS
 // =============================
 mongoose.connect(
-  'mongodb://127.0.0.1:27017/foodapp'
+  'mongodb+srv://savoryspot:Savory123@savoryspotdb.ceddmo1.mongodb.net/foodapp?retryWrites=true&w=majority&appName=SavorySpotDB'
 )
 .then(() => {
 
-  console.log('✅ DB Connected');
+  console.log('✅ MongoDB Atlas Connected');
 
 })
 .catch((err) => {
 
   console.log(
     '❌ DB Error:',
-    err,
+    err
   );
 
 });
@@ -63,6 +63,8 @@ const UserSchema =
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
 
     password: {
@@ -189,11 +191,14 @@ app.post(
 
     try {
 
-      const {
+      let {
         name,
         email,
         password,
       } = req.body;
+
+      email =
+        email.toLowerCase().trim();
 
       if (
         !name ||
@@ -272,10 +277,13 @@ app.post(
 
     try {
 
-      const {
+      let {
         email,
         password,
       } = req.body;
+
+      email =
+        email.toLowerCase().trim();
 
       if (
         !email ||
@@ -386,7 +394,8 @@ app.put(
 
       const user =
         await User.findOne({
-          email,
+          email:
+            email.toLowerCase().trim(),
         });
 
       if (!user) {
@@ -398,7 +407,6 @@ app.put(
 
       }
 
-      // UPDATE PASSWORD
       user.password =
         newPassword;
 
@@ -501,8 +509,12 @@ app.post(
 
       const newSupport =
         new Support({
-          email,
+
+          email:
+            email.toLowerCase().trim(),
+
           message,
+
         });
 
       await newSupport.save();
@@ -584,10 +596,17 @@ app.post(
 // =============================
 // 🚀 START SERVER
 // =============================
-app.listen(5000, () => {
+const PORT =
+  process.env.PORT || 5000;
 
-  console.log(
-    '🚀 Server running on port 5000'
-  );
+app.listen(
+  PORT,
+  '0.0.0.0',
+  () => {
 
-});
+    console.log(
+      `🚀 Server running on port ${PORT}`
+    );
+
+  }
+);
