@@ -591,7 +591,16 @@ app.post(
 
   }
 );
+// =============================
+// 🚀 ROOT ROUTE
+// =============================
+app.get('/', (req, res) => {
 
+  res.send(
+    'SavorySpot Backend Running'
+  );
+
+});
 
 // =============================
 // 🚀 START SERVER
