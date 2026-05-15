@@ -73,4 +73,5 @@ module.exports =
   mongoose.model(
     'Restaurant',
     restaurantSchema,
+    'restaurants'
   );
